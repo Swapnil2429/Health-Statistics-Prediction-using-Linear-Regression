@@ -18,7 +18,6 @@ df = spark.read.format(file_type) \
 
 display(df)
 
-# COMMAND ----------
 
 import pandas as pd
 import numpy as np
@@ -34,7 +33,7 @@ from sklearn.linear_model import LinearRegression
 
 
 
-# COMMAND ----------
+
 
 # File location and type
 file_location = "/FileStore/tables/Global_Health_Statistics.csv"
@@ -140,7 +139,6 @@ numeric_columns = ['Prevalence Rate (%)', 'Incidence Rate (%)', 'Healthcare Acce
 pandas_df[numeric_columns] = scaler.fit_transform(newpandas_df[numeric_columns])
 
 
-# COMMAND ----------
 
 
 
@@ -182,14 +180,14 @@ results = pd.DataFrame({'Actual': y_test, 'Predicted': y_pred})
 print(results.head())
 
 
-# COMMAND ----------
+
 
 from sklearn.model_selection import cross_val_score
 scores = cross_val_score(model, X, y, cv=5, scoring='neg_mean_squared_error')
 print("Cross-Validation MSE:", -scores.mean())
 
 
-# COMMAND ----------
+
 
 # Train-test split and evaluate performance
 from sklearn.model_selection import train_test_split
@@ -220,7 +218,6 @@ print(f"Training R²: {train_r2}")
 print(f"Test R²: {test_r2}")
 
 
-# COMMAND ----------
 
 import matplotlib.pyplot as plt
 
