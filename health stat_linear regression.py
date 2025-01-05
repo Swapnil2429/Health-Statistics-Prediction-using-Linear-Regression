@@ -1,6 +1,6 @@
 
 
-# File location and type
+# File location & type 
 file_location = "/FileStore/tables/Global_Health_Statistics.csv"
 file_type = "csv"
 
@@ -9,7 +9,7 @@ infer_schema = "false"
 first_row_is_header = "false"
 delimiter = ","
 
-# The applied options are for CSV files. For other file types, these will be ignored.
+
 df = spark.read.format(file_type) \
   .option("inferSchema", infer_schema) \
   .option("header", first_row_is_header) \
@@ -18,7 +18,7 @@ df = spark.read.format(file_type) \
 
 display(df)
 
-
+#import libraries
 import pandas as pd
 import numpy as np
 from pyspark.sql import SparkSession
@@ -30,10 +30,7 @@ from sklearn.pipeline import Pipeline
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.linear_model import LinearRegression
-
-
-
-
+import matplotlib.pyplot as plt
 
 # File location and type
 file_location = "/FileStore/tables/Global_Health_Statistics.csv"
@@ -61,7 +58,6 @@ pandas_df = df.toPandas()
 print(pandas_df.head())
 
 
-# COMMAND ----------
 
 #Data Exploration and Cleaning
 # Display basic information
@@ -75,19 +71,10 @@ print(pandas_df.isnull().sum())
 for column in pandas_df.select_dtypes(include='object').columns:
     print(f"{column} unique values: {pandas_df[column].unique()}")
 
-
-# COMMAND ----------
-
-pandas_df = pandas_df.dropna()  # Drop all rows with missing values
-
-
-# COMMAND ----------
-
+# Drop all rows with missing values
+pandas_df = pandas_df.dropna() 
 # Drop duplicate rows
 pandas_df = pandas_df.drop_duplicates()
-
-
-# COMMAND ----------
 
 # Correlation heatmap
 plt.figure(figsize=(10, 8))
@@ -100,21 +87,12 @@ sns.histplot(pandas_df['Mortality Rate (%)'], bins=30, kde=True)
 plt.title('Mortality Rate Distribution')
 plt.show()
 
-# COMMAND ----------
-
-# Drop the 'Country' column if not needed for prediction
+# Drop the 'Country' column as it was not rquired for prediction 
 # pandas_df = pandas_df.drop(columns=['Country'])
 
 # One-hot encode the 'Country' column (for machine learning models)
 pandas_df = pd.get_dummies(pandas_df, columns=['Country'], drop_first=True)
 
-# Now check the data types again
-print(pandas_df.dtypes)
-
-# Now you can proceed with the rest of your pipeline, such as splitting the data, training the model, etc.
-
-
-# COMMAND ----------
 
 # Get the list of columns with numeric data types (int, float, double)
 numeric_columns = [col[0] for col in df.dtypes if col[1] in ['int', 'double', 'float']]
@@ -125,25 +103,12 @@ numeric_spark_df = df.select(*numeric_columns)
 # Show the new DataFrame with numeric columns
 numeric_spark_df.show()
 
-
-# COMMAND ----------
-
 numeric_spark_df
 newpandas_df = numeric_spark_df.toPandas()
-
-
-# COMMAND ----------
 
 scaler = StandardScaler()
 numeric_columns = ['Prevalence Rate (%)', 'Incidence Rate (%)', 'Healthcare Access (%)']
 pandas_df[numeric_columns] = scaler.fit_transform(newpandas_df[numeric_columns])
-
-
-
-
-
-
-# Assuming your DataFrame is named 'newpandas_df'
 
 # 1. Select feature columns and the target column
 # Replace with the actual numeric columns you want to use for training
@@ -219,7 +184,6 @@ print(f"Test R²: {test_r2}")
 
 
 
-import matplotlib.pyplot as plt
 
 # Plot actual vs predicted values for training data
 plt.scatter(y_train, model.predict(X_train))
